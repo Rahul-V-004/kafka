@@ -54,13 +54,7 @@ services:
         condition: service_healthy
     command: >
       /bin/sh -c "
-      /opt/kafka/bin/kafka-topics.sh
-        --bootstrap-server kafka:29092
-        --create
-        --if-not-exists
-        --topic order-events
-        --partitions 3
-        --replication-factor 1;
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic order-events --partitions 3 --replication-factor 1;
       echo 'Topic order-events is ready.';
       "
   order-producer:
@@ -78,9 +72,7 @@ services:
         echo \"$$event\";
         i=$$((i + 1));
         sleep 3;
-      done | /opt/kafka/bin/kafka-console-producer.sh
-        --bootstrap-server kafka:29092
-        --topic order-events
+      done | /opt/kafka/bin/kafka-console-producer.sh --bootstrap-server kafka:29092 --topic order-events
       "
   order-consumer:
     image: apache/kafka:4.0.0
@@ -91,11 +83,5 @@ services:
     command: >
       /bin/sh -c "
       sleep 5;
-      /opt/kafka/bin/kafka-console-consumer.sh
-        --bootstrap-server kafka:29092
-        --topic order-events
-        --group order-consumer-group
-        --from-beginning
-        --property print.partition=true
-        --property print.offset=true
+      /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka:29092 --topic order-events --group order-consumer-group --from-beginning --property print.partition=true --property print.offset=true
       "
