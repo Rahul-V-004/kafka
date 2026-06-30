@@ -29,19 +29,23 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-
   kafka-ui:
-    image: provectuslabs/kafka-ui:v0.7.2
+    # NOTE: provectuslabs/kafka-ui was abandoned by its maintainers in late 2023.
+    # The last release (v0.7.2, April 2024) predates Kafka 4.0 (released 2025)
+    # and is known to have "topics not listed" issues. Using the actively
+    # maintained community fork instead.
+    image: ghcr.io/kafbat/kafka-ui:v1.3.0
     container_name: kafka-ui
     depends_on:
       kafka:
         condition: service_healthy
+      topic-setup:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: local-kafka
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
-
   topic-setup:
     image: apache/kafka:4.0.0
     container_name: kafka-topic-setup
@@ -59,7 +63,6 @@ services:
         --replication-factor 1;
       echo 'Topic order-events is ready.';
       "
-
   order-producer:
     image: apache/kafka:4.0.0
     container_name: kafka-order-producer
@@ -79,7 +82,6 @@ services:
         --bootstrap-server kafka:29092
         --topic order-events
       "
-
   order-consumer:
     image: apache/kafka:4.0.0
     container_name: kafka-order-consumer

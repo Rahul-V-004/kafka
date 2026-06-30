@@ -30,7 +30,7 @@ This setup is intentionally simple and local. It is not a production Kafka setup
 Run:
 
 ```bash
-docker compose up
+docker compose up -d
 ```
 
 Open Kafka UI:
