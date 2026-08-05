@@ -27,7 +27,7 @@ Architecture:
 
 # Step 1: Create docker-compose.yml
 
-Create a file named `docker-compose.yml`
+Create a file named `docker-compose-test.yml`
 
 ```yaml
 version: '3.8'
@@ -55,7 +55,7 @@ services:
 # Step 2: Start Kafka
 
 ```bash
-docker compose up -d
+docker compose -f docker-compose-test.yml up -d
 ```
 
 Verify the container is running.
